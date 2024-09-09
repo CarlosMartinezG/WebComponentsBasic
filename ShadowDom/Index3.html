@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <style>
+        :root{
+            --border-color:#e1e0e3;
+            --card-bg-color:#fff;
+            --h1-color:#1d1d1d;
+            --p-color:#1d1d1d;
+            --btn-bg-color:#e1111c;
+            --btn-color:#fff;
+        }
+
+        .dark{
+            --border-color:transparent;
+            --card-bg-color:#4B5C6F;
+            --h1-color:#fff;
+            --p-color:#fff;
+            --btn-bg-color:#fff;
+            --btn-color:#404040;
+        }
+
+        app-counter{
+            display:flex;
+            align-self: center;
+            justify-content: center;
+            flex-flow: wrap;
+            font-family: Davivienda, Arial, Helvetica, sans-serif;
+            color: #404040;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        app-card{
+            display:flex;
+            align-self: center;
+            justify-content: center;
+            flex-flow: column;
+        }
+
+        :not(:defined){
+            display: none;
+        }
+    </style>
+</head>
+<body class="dark">
+    <app-card>
+        <h1 slot="card-header">Title</h1>
+        <p slot="card-body">text of the body</p>
+
+        <app-button slot="card-body" onclick="swaptmode()">Switch mode</app-button>
+    </app-card>
+
+    <script>
+        const adding = () =>{
+            const addButton = document.querySelector("app-button");
+            addButton.inprogress = true;
+
+            setTimeout(() =>{
+                const counter = document.createElement("app-counter");
+                counter.setAttribute("until", "5");
+                document.body.append(counter);
+                addButton.inprogress = false;
+            }, 2000);
+        }
+
+        const removing = () =>{
+            document.querySelector("app-counter").remove();
+        }
+
+        const swaptmode = () =>{
+            if(document.body.classList.contains("dark")){
+                document.body.classList.remove("dark");
+            } else{
+                document.body.classList.add("dark")
+            }
+        }
+    </script>
+
+    <script src="src/button3.js" type="module"></script>
+    <script src="src/counter.js" type="module"></script>
+    <script src="src/card3.js" type="module"></script>
+</body>
+</html>

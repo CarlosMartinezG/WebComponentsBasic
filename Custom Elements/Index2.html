@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components</title>
+
+    <style>
+        .btn{
+            background: #e1111c;
+            font-family: Davivienda, Arial, Helvetica, sans-serif;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px 16px;
+            min-width: 224px;
+            min-height: 48px;
+            border-radius: 24px;
+            border: none;
+            margin: 24px auto;
+            cursor: pointer;
+        }
+
+        .btn:disabled{
+            background: #e1e0e3;
+            color: #6e6e6e;
+        }
+
+        .fade{
+            animation: fading 0.3s linear;
+        }
+
+        @keyframes fading{
+            0%{color:#e1e0e3}
+            100%{color: #6e6e6e;}
+        }
+    </style>
+</head>
+<body>
+    <app-button id="btn_login" onclick="login()" label="Login"></app-button>
+    <app-button id="btn_register" onclick="register()" label="Register"></app-button>
+
+    <script>
+        const loginButton = document.querySelector('#btn_login');
+        const login = () => {
+            loginButton.setAttribute("inprogress", "true");
+
+            setTimeout(() => {
+                loginButton.removeAttribute("inprogress");
+                console.log("Login response");
+            }, 2000);
+        };
+
+        const registerButton = document.querySelector('#btn_register');
+        const register = () => {
+            registerButton.setAttribute("inprogress", "true");
+
+            setTimeout(() => {
+                registerButton.removeAttribute("inprogress");
+                console.log("Register response");
+            }, 2000);
+        };
+
+        class Button extends HTMLElement{
+            constructor(){
+                super();
+
+                const label = this.getAttribute("label");
+                this.innerHTML = `<button class="btn">${label}</button>`;
+            }
+
+            static get observedAttributes(){
+                return["inprogress"];
+            }
+
+            attributeChangedCallback(attribute, oldValue, newValue){
+                const button = this.querySelector("Button");
+                if(newValue){
+                    button.textContent = "Loading...";
+                    button.setAttribute("disabled", "true");
+                    button.classList.add('fade');
+                } else {
+                    button.textContent = this.getAttribute("label");
+                    button.removeAttribute("disabled");
+                    button.classList.remove('fade');
+                }
+            }
+        }
+
+        customElements.define("app-button", Button);
+    </script>
+</body>
+</html>

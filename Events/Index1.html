@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    
+    <style>
+        :root{
+            --border-color:#e1e0e3;
+            --card-bg-color:#fff;
+            --h1-color:#1d1d1d;
+            --p-color:#1d1d1d;
+            --btn-bg-color:#e1111c;
+            --btn-color:#fff;
+        }
+
+        .dark{
+            --border-color:transparent;
+            --card-bg-color:#4B5C6F;
+            --h1-color:#fff;
+            --p-color:#fff;
+            --btn-bg-color:#fff;
+            --btn-color:#404040;
+        }
+
+        app-counter{
+            display:flex;
+            align-self: center;
+            justify-content: center;
+            flex-flow: wrap;
+            font-family: Davivienda, Arial, Helvetica, sans-serif;
+            color: #404040;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        app-card{
+            display:flex;
+            align-self: center;
+            justify-content: center;
+            flex-flow: column;
+        }
+
+        app-basicform{
+            display:flex;
+            align-self: center;
+            justify-content: center;
+            flex-flow: column;
+            margin: 24px;
+        }
+
+        app-input{
+            display:flex;
+            align-self: center;
+            justify-content: center;
+            flex-flow: column;
+            margin: 24px;
+        }
+
+        :not(:defined){
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <app-input label="Escriba la instrucción"></app-input>
+    
+    <app-form></app-form>
+    
+    <script>
+        document.addEventListener("click-app-button", (event) =>{
+            console.log("clicked the button");
+        });
+
+        document.addEventListener("app-input", (event) =>{
+            console.log("app input event:", event.target.tagName, event.detail);
+        });
+    </script>
+
+    <script src="src/button.js" type="module"></script>
+    <script src="src/counter.js" type="module"></script>
+    <script src="src/card.js" type="module"></script>
+    <script src="src/input.js" type="module"></script>
+    <script src="src/basic-form.js" type="module"></script>
+</body>
+</html>

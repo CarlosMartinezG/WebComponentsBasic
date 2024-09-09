@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components</title>
+
+    <style>
+        .btn{
+            background: #e1111c;
+            font-family: Davivienda, Arial, Helvetica, sans-serif;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px 16px;
+            min-width: 224px;
+            min-height: 48px;
+            border-radius: 24px;
+            border: none;
+            margin: 24px auto;
+            cursor: pointer;
+        }
+
+        .btn:disabled{
+            background: #e1e0e3;
+            color: #6e6e6e;
+        }
+    </style>
+</head>
+<body>
+    <button id="classic_b" class="btn" onclick="logAction()">Print log</button>
+
+    <script>
+        const button = document.querySelector('#classic_b');
+        const logAction = () => {
+            console.log("Loading...", new Date());
+
+            const originalLabel = button.textContent;
+
+            button.textContent = "Loading...";
+            button.setAttribute("disabled", "true");
+            button.classList.add('fade');
+
+            setTimeout(() => {
+                button.textContent = originalLabel;
+                button.removeAttribute("disabled");
+                button.classList.remove('fade');
+
+                console.log("Hello console", new Date());
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

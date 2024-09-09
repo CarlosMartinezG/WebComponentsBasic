@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components</title>
+
+    <style>
+        .btn{
+            background: #e1111c;
+            font-family: Davivienda, Arial, Helvetica, sans-serif;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px 16px;
+            min-width: 224px;
+            min-height: 48px;
+            border-radius: 24px;
+            border: none;
+            margin: 16px auto;
+            cursor: pointer;
+        }
+
+        .btn:disabled{
+            background: #e1e0e3;
+            color: #6e6e6e;
+        }
+
+        .fade{
+            animation: fading 0.3s linear;
+        }
+
+        @keyframes fading{
+            0%{color:#e1e0e3}
+            100%{color: #6e6e6e;}
+        }
+
+        button{
+            display:flex;
+            align-self: center;
+            align-content: center;
+            justify-content: center;
+            flex-flow: wrap;
+        }
+
+        app-counter{
+            display:flex;
+            align-self: center;
+            justify-content: center;
+            flex-flow: wrap;
+            font-family: Davivienda, Arial, Helvetica, sans-serif;
+            color: #404040;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        button[inprogress]{
+            color: #404040;
+        }
+    </style>
+</head>
+<body>
+    <button is="app-button" class="btn" onclick="adding()" label="Add">Add</button>
+    <button is="app-button" class="btn" onclick="removing()" label="Remove">Remove</button>
+
+    <script>
+        
+        const adding = () =>{
+            const addButton = document.querySelector("button");
+            addButton.inprogress = true;
+
+            setTimeout(() =>{
+                const counter = document.createElement("app-counter");
+                counter.setAttribute("until", "5");
+                document.body.append(counter);
+                addButton.inprogress = false;
+            }, 2000);
+        }
+
+        const removing = () =>{
+            document.querySelector("app-counter").remove();
+        }
+
+        class Button extends HTMLButtonElement{
+            constructor(){
+                super();
+            }
+
+            connectedCallback(){
+                this.label = this.textContent;
+            }
+
+            set inprogress(progress){
+                if(progress){
+                    this.setAttribute("inprogress", "true");
+                } else{
+                    this.removeAttribute("inprogress");
+                }
+            }
+
+            get inprogress(){
+                return this.getAttribute("inprogress");
+            }
+
+            static get observedAttributes(){
+                return["inprogress"];
+            }
+
+            attributeChangedCallback(attribute, oldValue, newValue){
+                if(newValue){
+                    this.textContent = "Loading...";
+                    this.setAttribute("disabled", "true");
+                    this.classList.add('fade');
+                } else {
+                    this.textContent = this.label;
+                    this.removeAttribute("disabled");
+                    this.classList.remove('fade');
+                }
+            }
+        }
+
+        class Counter extends HTMLElement{
+            constructor(){
+                super();
+                console.log("Constructor");
+                this.count = 0;
+            }
+
+            connectedCallback(){
+                console.log("Connected");
+                this.innerHTML = this.count;
+
+                const until = this.getAttribute("until");
+                this.interval = setInterval(() =>{
+                    if (this.count < until){
+                        this.count += 1;
+                        this.innerHTML = this.count;
+                    } else {
+                        clearInterval(this.interval);
+                    }
+                }, 1000);
+            }
+
+            disconnectedCallback(){
+                console.log("Disconnected");
+                clearInterval(this.interval);    
+            }
+
+            attributeChangedCallback(attribute, oldVal, newVal){
+                console.log("Attribute changed"); 
+            }
+
+            adoptedCallback(){
+                console.log("Adopted"); 
+            }
+        }
+
+        customElements.define("app-button", Button, {extends: "button"});
+        customElements.define("app-counter", Counter);
+    </script>
+</body>
+</html>
